@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Login {
+  id       Int     @id @default(autoincrement())
+  name     String
+  cnpj     String  @unique
+  email    String  @unique
+  password String
+  isAdmin  Boolean @default(true)
+}
+
+model Register {
+  id                Int      @id @default(autoincrement())
+  arrival_date      DateTime
+  cnpj_or_cpf_client String
+  name_client       String
+  address_id        Int
+  address           Address  @relation(fields: [address_id], references: [id])
+  login             Login?   @relation(fields: [cnpj_or_cpf_client], references: [cnpj])
+
+}
+
+model Address {
+  id       Int        @id @default(autoincrement())
+  city     String
+  state    String
+  register Register? @relation(fields: [id], references: [address_id])
+
+
+}
+
+model EquipmentInformation {
+  id               Int           @id @default(autoincrement())
+  register_id      Int
+  order            Int           @unique
+  type_service     String
+  service_location String
+  equipment_name   String
+  serial_number    String?
+  number_nf        Int?
+  status_id        Int
+  accept           Int
+  certificate_id   Int
+  transport_id     Int
+  register         Register     @relation(fields: [register_id], references: [id])
+  status           Status       @relation(fields: [status_id], references: [id])
+  acceptType       Accept       @relation(fields: [accept], references: [id])
+  certificate      Certificate  @relation(fields: [certificate_id], references: [id])
+  transport        Transport    @relation(fields: [transport_id], references: [id])
+
+  Address Address[]
+  Register Register
+}
+
+model Status {
+  id         Int     @id @default(autoincrement())
+  name       String  @default("Avaliação")
+  created_at DateTime
+  update_at  DateTime
+}
+
+model Accept {
+  id         Int     @id @default(autoincrement())
+  name       String
+  created_at DateTime
+  update_at  DateTime
+}
+
+model Certificate {
+  id         Int     @id @default(autoincrement())
+  path       String
+  signed     Boolean @default(false)
+  created_at DateTime
+  update_at  DateTime
+}
+
+model LoginUser {
+  id        Int     @id @default(autoincrement())
+  name      String
+  cnpj_or_cpf String
+  email     String  @unique
+  password  String
+}
+
+model Transport {
+  id              Int      @id @default(autoincrement())
+  status          String?
+  shopping_company String?
+  collection_date DateTime?
+}
