@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Nathalya-Pires/projeto22-autoral-back-end#readme",
   "dependencies": {
+    "@prisma/client": "^4.15.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.22",
+    "prisma": "^4.15.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.3"
   }
